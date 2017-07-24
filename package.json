@@ -1,0 +1,27 @@
+{
+  "name": "database-js-firebase",
+  "version": "1.0.0",
+  "description": "Database-js interface for Firebase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlaanderson/database-js-firebase.git"
+  },
+  "keywords": [
+    "database-js",
+    "firebase"
+  ],
+  "author": "Michael Anderson <michael@anderson-clan.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mlaanderson/database-js-firebase/issues"
+  },
+  "homepage": "https://github.com/mlaanderson/database-js-firebase#readme",
+  "dependencies": {
+    "firebase": "^4.1.3",
+    "node-sqlparser": "^1.0.2"
+  }
+}
