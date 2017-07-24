@@ -27,7 +27,7 @@ If your Firebase data is structured as:
 
 Then your access will be like:
 ~~~~
-var Database = require('database-js');
+var Database = require('database-js2');
 
 (async () => {
     let connection, statement, rows;
