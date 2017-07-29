@@ -1,6 +1,6 @@
 {
   "name": "database-js-firebase",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Database-js interface for Firebase",
   "main": "index.js",
   "scripts": {
