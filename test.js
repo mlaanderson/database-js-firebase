@@ -9,7 +9,13 @@ var db = require('.');
         Password: 'password'
     });
     let stmt, results;
-    results = await connection.query('SELECT * FROM states ORDER BY Ranking ASC LIMIT 10');
-    console.log(results);
-    await connection.close();
+    try {
+        results = await connection.query('SELECT * FROM states ORDER BY Ranking ASC LIMIT 1,1');
+        console.log(results);
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await connection.close();
+        setTimeout(() => { process.exit(); }, 0)
+    }
 })();

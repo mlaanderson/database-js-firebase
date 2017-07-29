@@ -124,10 +124,6 @@ class Firebase {
             console.warn("GROUP BY is unsupported");
         }
 
-        if (sqlObj.limit !== null) {
-            console.warn("LIMIT is unsupported");
-        }
-
         this[m_root].child(sqlObj.from[0].table).once('value').then((snapshot) => {
             let raw = snapshot.val();
             let rows = [];
@@ -155,6 +151,14 @@ class Firebase {
                 });
             }
 
+            if (sqlObj.limit) {
+                if (sqlObj.limit.length !== 2) {
+                    throw new Error("Invalid LIMIT expression: Use LIMIT [offset,] number");
+                }
+                let offs = parseInt(sqlObj.limit[0].value);
+                let len = parseInt(sqlObj.limit[1].value);
+                rows = rows.slice(offs, offs + len);
+            }
             resolve(rows);
         });
     }
