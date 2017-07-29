@@ -124,10 +124,6 @@ class Firebase {
             console.warn("GROUP BY is unsupported");
         }
 
-        if (sqlObj.orderby !== null) {
-            console.warn("ORDER BY is unsupported");
-        }
-
         if (sqlObj.limit !== null) {
             console.warn("LIMIT is unsupported");
         }
@@ -140,6 +136,25 @@ class Firebase {
                     this.chooseFields(sqlObj, rows, raw[row_id]);
                 }
             }
+
+            if (sqlObj.orderby) {
+                rows.sort((a, b) => {
+                    for (let orderer of sqlObj.orderby) {
+                        if (orderer.expr.type !== 'column_ref') {
+                            throw new Error("ORDER BY only supported for columns, aggregates are not supported");
+                        }
+
+                        if (a[orderer.expr.column] > b[orderer.expr.column]) {
+                            return orderer.type = 'ASC' ? 1 : -1;
+                        }
+                        if (a[orderer.expr.column] < b[orderer.expr.column]) {
+                            return orderer.type = 'ASC' ? -1 : 1;
+                        }
+                    }
+                    return 0;
+                });
+            }
+
             resolve(rows);
         });
     }
