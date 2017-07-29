@@ -2,7 +2,7 @@
 Database-js interface for Firebase
 ## About
 Database-js-firebase is a [database-js](https://github.com/mlaanderson/database-js) wrapper around the Firebase database library. It creates a Promises around an SQL to Firebase (NoSQL) interpreter.
-It significantly restricts the structure Firebase as well as the access to Firebase. Right now access is limited to email and password. Data must be stored using Firebase's ref.push. SQL commands are limited to SELECT, UPDATE, INSERT and DELETE. WHERE works well. JOINs are not allowed. ORDER BY is in progress.
+It significantly restricts the structure Firebase as well as the access to Firebase. Right now access is limited to email and password. Data must be stored using Firebase's ref.push. SQL commands are limited to SELECT, UPDATE, INSERT and DELETE. WHERE works well. JOINs are not allowed. GROUP BY is not supported. LIMIT and OFFSET are combined into a single LIMIT syntax: `LIMIT [offset,]number`
 While a SELECT command can return a JSON object for a given field, JSON values cannot be UPDATEd or INSERTed, or be part of a WHERE clause.
 You probably should not use this, it was built as an experiment.
 ## Usage
