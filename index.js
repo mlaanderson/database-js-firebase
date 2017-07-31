@@ -8,6 +8,12 @@ var m_authenticator = Symbol('authenticator');
 
 
 class Firebase {
+    /**
+     * Creates an instance of Firebase.
+     * @param {string} root 
+     * @param {object} credentials 
+     * @memberof Firebase
+     */
     constructor(root, credentials) {
         var self = this;
         var resolveAuth;
@@ -32,13 +38,23 @@ class Firebase {
         firebase.auth().onAuthStateChanged(onAuth);
     }
 
-    doWhere(where, data) {
+    /**
+     * Tests the passed row based on the where array.
+     * This could be faster on the server if the data has been
+     * indexed, and if the user only wants a single WHERE.
+     * 
+     * @param {object} where Where object from the SQL Parser
+     * @param {object} row Row to compare
+     * @returns {boolean} if the row matches the where object
+     * @memberof Firebase
+     */
+    doWhere(where, row) {
         if (where === null) return true;
         var self = this;
 
         function getVal(obj) {
-            if (obj.type === "column_ref") return data[obj.column];
-            if (obj.type === "binary_expr") return self.doWhere(obj, data);
+            if (obj.type === "column_ref") return row[obj.column];
+            if (obj.type === "binary_expr") return self.doWhere(obj, row);
             return obj.value;
         }
 
@@ -65,6 +81,16 @@ class Firebase {
         }
     }
 
+    /**
+     * Used to push a row into the data object. If the fields are limited
+     * in the query, only places the requested fields.
+     * 
+     * @param {object} sqlObj 
+     * @param {Array} data 
+     * @param {object} row 
+     * @returns 
+     * @memberof Firebase
+     */
     chooseFields(sqlObj, data, row) {
         if (sqlObj.columns === "*") {
             data.push(row);
@@ -115,6 +141,15 @@ class Firebase {
         }
     }
 
+    /**
+     * Performs an SQL SELECT. This is called from a Promise.
+     * 
+     * @param {function} resolve 
+     * @param {function} reject 
+     * @param {any} sqlObj 
+     * @returns 
+     * @memberof Firebase
+     */
     doSelect(resolve, reject, sqlObj) {
         if (sqlObj.from.length !== 1) {
             return reject("Selects from more than one table are not supported");
@@ -163,6 +198,14 @@ class Firebase {
         });
     }
 
+    /**
+     * Performs an SQL UPDATE. This is called from a Promise
+     * 
+     * @param {function} resolve 
+     * @param {function} reject 
+     * @param {any} sqlObj 
+     * @memberof Firebase
+     */
     doUpdate(resolve, reject, sqlObj) {
 
         this[m_root].child(sqlObj.table).once('value').then((snapshot) => {
@@ -189,6 +232,14 @@ class Firebase {
         });
     }
 
+    /**
+     * Performs an SQL INSERT. This is called from a Promise.
+     * 
+     * @param {function} resolve 
+     * @param {function} reject 
+     * @param {any} sqlObj 
+     * @memberof Firebase
+     */
     doInsert(resolve, reject, sqlObj) {
         let rows = [];
         for (let i = 0; i < sqlObj.values.length; i++) {
@@ -207,6 +258,14 @@ class Firebase {
         });
     }
 
+    /**
+     * Performs an SQL DELETE. This is called from a Promise
+     * 
+     * @param {function} resolve 
+     * @param {function} reject 
+     * @param {any} sqlObj 
+     * @memberof Firebase
+     */
     doDelete(resolve, reject, sqlObj) {
         this[m_root].child(sqlObj.from[0].table).once('value').then((snapshot) => {
             let raw = snapshot.val();
@@ -225,6 +284,13 @@ class Firebase {
         });
     }
 
+    /**
+     * Runs the SQL statement
+     * 
+     * @param {string} sql 
+     * @returns {Promise<array>} Promise of array of selected rows, updated rows, inserted rows, or deleted row Firebase keys
+     * @memberof Firebase
+     */
     runSQL(sql) {
         var self = this;
         return new Promise((resolve, reject) => {
@@ -267,14 +333,34 @@ class Firebase {
         });
     }
 
+    /**
+     * Executes the passed SQL
+     * 
+     * @param {string} sql 
+     * @returns {Promise<array>} Promise of array of selected rows, updated rows, inserted rows, or deleted row Firebase keys
+     * @memberof Firebase
+     */
     execute(sql) {
         return this.runSQL(sql);
     }
 
+    /**
+     * Executes the passed SQL
+     * 
+     * @param {string} sql 
+     * @returns {Promise<array>} Promise of array of selected rows, updated rows, inserted rows, or deleted row Firebase keys
+     * @memberof Firebase
+     */
     query(sql) {
         return this.runSQL(sql);
     }
 
+    /**
+     * Closes the connection, sets Firebase to offline mode.
+     * 
+     * @returns {Promise<boolean>}
+     * @memberof Firebase
+     */
     close() {
         firebase.database().goOffline();
         return Promise.resolve(true);
@@ -282,6 +368,11 @@ class Firebase {
 }
 
 module.exports = {
+    /**
+     * Opens the connection using the connection object.
+     * @param {object} connection
+     * @returns {Firebase}
+     */
     open: function(connection) {
         let params = {};
         let paramArray = connection.Parameters ? connection.Parameters.split(/[&]/g) : [];
