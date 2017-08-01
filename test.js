@@ -10,7 +10,7 @@ var db = require('.');
     });
     let stmt, results;
     try {
-        results = await connection.query('SELECT * FROM states ORDER BY Ranking ASC LIMIT 1,1');
+        results = await connection.query('SELECT * FROM states ORDER BY Ranking DESC');
         console.log(results);
     } catch (err) {
         console.error(err);
