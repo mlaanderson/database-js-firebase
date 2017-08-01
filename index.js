@@ -58,6 +58,24 @@ class Firebase {
             return obj.value;
         }
 
+        function replaceIfNotPrecededBy(notPrecededBy, replacement) {
+            return function(match) {
+                return match.slice(0, notPrecededBy.length) === notPrecededBy
+                ? match
+                : replacement;
+            }
+        }
+
+        function like2RegExp(like) {
+            var restring = like;
+            restring = restring.replace(/([\.\*\?\$\^])/g, "\\$1");
+            restring = restring.replace(/(?:\\)?%/g, replaceIfNotPrecededBy('\\', '.*?'));
+            restring = restring.replace(/(?:\\)?_/g, replaceIfNotPrecededBy('\\', '.'));
+            restring = restring.replace('\\%', '%');
+            restring = restring.replace('\\_', '_');
+            return new RegExp('^' + restring + '$');
+        }
+
         switch (where.type) {
             case "binary_expr":
                 switch(where.operator) {
@@ -66,12 +84,24 @@ class Firebase {
                     case "!=":
                     case "<>":
                         return getVal(where.left) != getVal(where.right);
+                    case "<":
+                        return getVal(where.left) < getVal(where.right);
+                    case "<=":
+                        return getVal(where.left) <= getVal(where.right);
+                    case ">":
+                        return getVal(where.left) > getVal(where.right);
+                    case ">=":
+                        return getVal(where.left) >= getVal(where.right);
                     case "AND":
                         return getVal(where.left) && getVal(where.right);
                     case "OR":
                         return getVal(where.left) && getVal(where.right);
                     case "IS":
                         return getVal(where.left) === getVal(where.right)
+                    case "LIKE":
+                        return like2RegExp(getVal(where.right)).test(getVal(where.left)) === true;
+                    case "NOT LIKE":
+                        return like2RegExp(getVal(where.right)).test(getVal(where.left)) === false;
                     default:
                         return false;
                 }
