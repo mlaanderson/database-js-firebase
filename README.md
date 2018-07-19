@@ -1,5 +1,5 @@
 # database-js-firebase
-[![Build Status](https://travis-ci.org/mlaanderson/database-js-sqlite.svg?branch=master)](https://travis-ci.org/mlaanderson/database-js-sqlite)
+[![Build Status](https://travis-ci.org/mlaanderson/database-js-firebase.svg?branch=master)](https://travis-ci.org/mlaanderson/database-js-firebase)
 
 Database-js interface for Firebase
 
@@ -8,11 +8,11 @@ Database-js-firebase is a [database-js](https://github.com/mlaanderson/database-
 
 It significantly restricts the structure Firebase as well as the access to Firebase. Right now access is limited to email and password. 
 
-Data must be stored using Firebase's ref.push. SQL commands are limited to SELECT, UPDATE, INSERT and DELETE. WHERE works well. JOINs are not allowed. GROUP BY is not supported. LIMIT and OFFSET are combined into a single LIMIT syntax: `LIMIT [offset,]number`
+Data must be stored using Firebase's ref.push. SQL commands are limited to CREATE, SELECT, UPDATE, INSERT and DELETE. WHERE, GROUP BY, and LIMIT are all functional. INNER JOIN, LEFT JOIN and RIGHT JOIN work, OUTER JOIN is not supported. Aggregate functions COUNT and SUM are supported.
+
+CREATEs do not create a table structure because Firebase does not need a table to exist in order to insert data.
 
 While a SELECT command can return a JSON object for a given field, JSON values cannot be UPDATEd or INSERTed, or be part of a WHERE clause.
-
-You probably should not use this, it was built as an experiment.
 
 [RunKit Demo](https://runkit.com/mlaanderson/runkit-npm-database-js2)
 
