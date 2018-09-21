@@ -1,4 +1,5 @@
 const AbstractDriver = require("database-js-sqlparser");
+const Common = require('database-js-common');
 var firebase = require('firebase');
 
 var m_root = Symbol('root');
@@ -122,13 +123,7 @@ module.exports = {
      * @returns {Firebase}
      */
     open: function(connection) {
-        let params = {};
-        let paramArray = connection.Parameters ? connection.Parameters.split(/[&]/g) : [];
-
-        paramArray.map((p) => {
-            let parts = p.split('=');
-            params[parts[0]] = parts[1];
-        });
+        let params = connection.Parameters ? Common.parseConnectionParams(connection.Parameters) : {};
 
         let config = {
             apiKey: params.apiKey || "",
