@@ -4,7 +4,7 @@
 Database-js interface for Firebase
 
 ## About
-Database-js-firebase is a [database-js](https://github.com/mlaanderson/database-js) wrapper around the Firebase database library. It creates a Promises wrapper around an SQL to Firebase (NoSQL) interpreter.
+Database-js-firebase is a [database-js](https://github.com/mlaanderson/database-js) wrapper around the [Firebase database library](https://github.com/firebase/firebase-js-sdk). It creates a Promises wrapper around an SQL to Firebase (NoSQL) interpreter.
 
 It significantly restricts the structure Firebase as well as the access to Firebase. Right now access is limited to email and password. 
 
