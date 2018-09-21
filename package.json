@@ -21,8 +21,9 @@
   },
   "homepage": "https://github.com/mlaanderson/database-js-firebase#readme",
   "dependencies": {
-    "firebase": "^4.1.3",
-    "database-js-sqlparser": "^1.0.0"
+    "database-js-common": "git+https://github.com/mlaanderson/database-js-common.git",
+    "database-js-sqlparser": "^1.0.0",
+    "firebase": "^5.5.1"
   },
   "devDependencies": {
     "database-js": "^3.0.2"
